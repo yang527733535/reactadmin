@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import './login.less'
-import logo from './images/logo.png'
-import { Form, Icon, Input, Button } from 'antd';
+import logo from '../../assets/images/logo.png'
+import { Form, Icon, Input, Button,message } from 'antd';
+import {reqlogin} from '../../api/index.js'
+import memoryUtils from '../../utils/memoryUtils.js'
+import   storeUtils   from '../../utils/storeUtils.js'
+import { Redirect } from 'react-router-dom';
 //登录的路由组件
 class Login extends Component {
 
@@ -11,12 +15,34 @@ class Login extends Component {
         event.preventDefault()
 
         //对所有表单的字段进行验证
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields( async(err, values) => {
             // 检验成功
             if (!err) {
-             console.log('提交登陆的ajax请求',values)
+            //  console.log('提交登陆的ajax请求',values)
+            //请求登陆
+            //jiegoufuzhi
+            const {username,password}  = values
+             const result = await reqlogin(username,password)
+            //  console.log('请求成功🚗',response.data)  
+            // const result=response.data //{statud:0,data} {statud:1,msg} 
+            if(result.status===0){
+                //login success
+                message.success('登陆成功')
+                    //跳转到管理页面 history是一个栈的结构
+                    //保存user
+
+                const user = result.data
+                memoryUtils.user = user  //保存到内存中
+                storeUtils.saveUser(user)    //保存到localstarage中
+               this.props.history.replace('/')
+            }else{
+                   //login fail 并且提示错误信息
+                message.error(result.msg)
+
+            
+            }
             } else{
-             console.log('failed')
+             console.log('检验失败❌')
             }
           });
 
@@ -46,7 +72,11 @@ class Login extends Component {
     }
 
     render() {
-
+  //如果用户已经登陆 自己跳转admin页面
+   const user= memoryUtils.user
+    if(user._id){
+      return  <Redirect to='/'></Redirect>   
+    }
         //得到具有强大功能的form对象
         const from = this.props.from
         const { getFieldDecorator } = this.props.form;
@@ -55,7 +85,7 @@ class Login extends Component {
             <header className='login-header'>  
                 <img src={logo} alt="logo"/>
                 <h1>
-                   后台管理项目 
+                   AVG DATA 
                 </h1>
              </header>
             <section className='login-container'>
@@ -140,3 +170,12 @@ class Login extends Component {
 const WrapLogin  = Form.create()(Login)
 
 export default WrapLogin;
+
+
+//async and await 
+//1.作用
+    //简化promise对象的使用 不用再使用then()来指定成功/失败的回调函数
+    //以同步编码（没有回调）的方式实现异步编程
+//2.用法
+//哪里用 await 在返回promise表达式左侧写 目的是为了不想要promise，想要promise异步执行成功的value数据
+//哪里用 async await所在函数（最近的）左侧写async

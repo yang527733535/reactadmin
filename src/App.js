@@ -12,7 +12,6 @@ class App extends Component {
         <Route path='/login' component={Login}></Route>
         <Route path='/' component={Admin}></Route>
         </Switch>
-      
         </BrowserRouter>
        )
     }
