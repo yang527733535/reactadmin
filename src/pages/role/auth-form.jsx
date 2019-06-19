@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {
     Form,
     Select,
@@ -11,7 +11,7 @@ const Item = Form.Item
 const { TreeNode } = Tree;
 //添加分类的form组件
 
-export default class Authform extends Component {
+export default class Authform extends PureComponent {
 
     static propTypes = {
         role: PropTypes.object,
@@ -47,14 +47,8 @@ export default class Authform extends Component {
         this.setState({ checkedKeys })
     }
 
-
     //为父组件提交最新的menus数据
     getMenus = () => this.state.checkedKeys
-
-
-
-
-
     componentWillMount() {
         this.treeNodes = this.getTreeNodes(menuList)
     }

@@ -67,3 +67,11 @@ export const reqaddroles = (roleName) =>ajax(BASE+'/manage/role/add',{roleName},
  
 //更新角色权限 这里的role是个对象
 export const requpdaterole = (role) =>ajax(BASE+'/manage/role/update',role,'POST')
+
+//获取所有用户列表
+
+export const requsers = () => ajax(BASE+'/manage/user/list')
+
+
+//deleteuesr
+export const deleteuser = (userId) => ajax(BASE+'/manage/user/delete',{userId},'POST')

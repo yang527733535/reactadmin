@@ -1,6 +1,7 @@
 {
   "name": "admin-client_final",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@antv/data-set": "^0.10.2",

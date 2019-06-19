@@ -121,8 +121,11 @@ export default class Category extends Component {
 
   //modal点击取消
   handleCancel = () => {
+    
  //清除输入数据
- this.form.resetFields()
+
+ console.log('handleCancel()')
+//  this.form.resetFields()
  //隐藏确定框
     this.setState({
       showStatus: 0

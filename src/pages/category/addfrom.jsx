@@ -3,13 +3,17 @@ import {
     Form,
     Select,
     Input,
-
 } from 'antd'
-
+import propTypes from 'prop-types'
 const Item = Form.Item
 const Option = Select.Option
 //添加分类的form组件
 class Addfrom extends Component {
+
+    static propTypes = {
+        categorys:propTypes.array.isRequired
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form
         return (
@@ -24,9 +28,7 @@ class Addfrom extends Component {
                             <Option value='2'>图书</Option>
                         </Select>
                     )}
-
                 </Item>
-
                 <Item>
                     {getFieldDecorator('categoryName', {
                         initialValue: ''
