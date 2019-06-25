@@ -11,27 +11,42 @@ const Option = Select.Option
 class Addfrom extends Component {
 
     static propTypes = {
-        categorys:propTypes.array.isRequired
+        setform:propTypes.func.isRequired,      //用来传递form对象的函数
+        categorys:propTypes.array.isRequired,   //一级分类的数组
+        parentId:propTypes.string.isRequired    //父分类的id
+    }
+
+
+    componentWillMount(){
+        this.props.setform(this.props.form)
     }
 
     render() {
+
+        const {categorys,parentId} = this.props
         const { getFieldDecorator } = this.props.form
         return (
             <Form>
                 <Item>
                     {getFieldDecorator('parentId', {
-                        initialValue: '0'
+                        initialValue: parentId
                     })(
                         <Select>
                             <Option value='0'>一级分类</Option>
-                            <Option value='1'>电脑</Option>
-                            <Option value='2'>图书</Option>
+                            {
+                               categorys.map(o=>
+                                <Option value={o._id}>{o.name}</Option>
+                               )
+                            }
                         </Select>
                     )}
                 </Item>
                 <Item>
                     {getFieldDecorator('categoryName', {
-                        initialValue: ''
+                        initialValue: '',
+                        rules:[
+                            {required:true,message:'分类消息必须输入'}
+                        ],
                     })(
                         <Input placeholder='请输入分类消息' />
         )}

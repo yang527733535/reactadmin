@@ -82,6 +82,7 @@ export default class Category extends Component {
   }
 
   //异步获取一级分类列表展示
+  // parentid : 如果没有指定根据状态中的parenti
   getcategory = async () => {
     //在发请求前，显示loading
     this.setState({
@@ -121,7 +122,7 @@ export default class Category extends Component {
 
   //modal点击取消
   handleCancel = () => {
-    
+
  //清除输入数据
 
  console.log('handleCancel()')
@@ -135,12 +136,41 @@ export default class Category extends Component {
   //添加分类
 
   addcategory = () => {
-    console.log('addcategory()')
+
+    this.form.validateFields(async(err,values)=>{
+      if(!err){
+        // 1隐藏确认框
+ this.setState({
+  showStatus:0
+})
+
+// 2收集数据 并提交添加分类的列表
+ const{ parentId,categoryName} = values
+this.form.resetFields()
+ const result =  await reqaddcategorys(parentId,categoryName)
+ if(result.status===0){
+     //重新获取分类列表显示
+     // this.getcategory()
+     // message.success('添加成功')
+  
+     this.getcategory()
+  
+}
+
+      }
+    })
+
   }
 
   //更新分类
-  updatecategory = async() => {
-    //1.隐藏确定框
+  updatecategory = () => {
+
+    
+    //进行表单验证 只有通过了才处理
+
+    this.form.validateFields(async(err,values)=>{
+      if(!err){
+        //1.隐藏确定框
     this.setState({
       showStatus: 0
     })
@@ -148,7 +178,7 @@ export default class Category extends Component {
  //2.发送更新请求
  //准备参数数据
  const categoryId=  this.category._id
- const categoryName = this.form.getFieldValue('categoryName')
+ const {categoryName} =values
 
  //清楚输入数据
  this.form.resetFields()
@@ -157,6 +187,14 @@ export default class Category extends Component {
   //3.重新显示列表
   this.getcategory()
    }
+      }else{
+
+      }
+
+    })
+
+
+    
   }
 
 
@@ -172,7 +210,6 @@ export default class Category extends Component {
   }
 
   render() {
-
     //读取状态数据
     const { categorys, showStatus, subcategorys, loading, parentId, parentName } = this.state
  
@@ -209,8 +246,13 @@ export default class Category extends Component {
           visible={showStatus === 1}
           onOk={this.addcategory}
           onCancel={this.handleCancel}
+          
         >
-          <Addfrom></Addfrom>
+          <Addfrom
+        categorys={categorys}
+        parentId={parentId}
+        setform={(form)=>{this.form=form}} 
+          ></Addfrom>
         </Modal>
 
         <Modal

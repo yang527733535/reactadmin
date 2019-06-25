@@ -75,3 +75,22 @@ export const requsers = () => ajax(BASE+'/manage/user/list')
 
 //deleteuesr
 export const deleteuser = (userId) => ajax(BASE+'/manage/user/delete',{userId},'POST')
+
+//获取商品分页列表
+
+
+export const reqproducts = (pageNum,pageSize) => ajax(BASE+'/manage/product/list',{pageNum,pageSize})
+
+//搜索商品分页列表 
+//searchType 搜索的类型productName/productDesc
+export const reqSearchProducts = ({pageNum,pageSize,searchName,searchType})=>ajax(BASE+'/manage/product/search',{
+    pageNum,
+    pageSize,
+    //要把传入的参数变成属性值的时候  要加上中括号
+    [searchType]:searchName
+})
+
+
+//获取一个分类
+// http://localhost:5000/manage/category/info
+export const reqCategory = (categoryId)=>ajax(BASE+'/manage/category/info',{categoryId})

@@ -29,6 +29,9 @@ class Updatefrom extends Component {
             <Form>
                 <Item>
                     {getFieldDecorator('categoryName', {
+                        rules:[
+                            {required:true,message:'分类名称必须输入'}
+                        ],
                         initialValue: catetoryName
                     })(
                         <Input placeholder='请输入分类消息' />
